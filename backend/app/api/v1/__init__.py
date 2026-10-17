@@ -1,7 +1,7 @@
 """API v1 router"""
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, agents, policies, executions, replays, evaluations, monitoring, webhooks, audit, analytics
+from app.api.v1.endpoints import auth, agents, policies, executions, replays, evaluations, monitoring, webhooks, audit, analytics, scheduler, notifications
 
 api_router = APIRouter()
 
@@ -15,5 +15,7 @@ api_router.include_router(monitoring.router, prefix="/monitoring", tags=["monito
 api_router.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
 api_router.include_router(audit.router, prefix="/audit", tags=["audit"])
 api_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
+api_router.include_router(scheduler.router, prefix="/scheduler", tags=["scheduler"])
+api_router.include_router(notifications.router, prefix="/notifications", tags=["notifications"])
 api_router.include_router(monitoring.router, prefix="/monitoring", tags=["monitoring"])
 api_router.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
