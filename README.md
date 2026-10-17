@@ -2,6 +2,11 @@
 
 **The Operating System for Trustworthy AI Agents**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
+[![React 18](https://img.shields.io/badge/React-18-61DAFB.svg)](https://reactjs.org)
+
 AgentOS is a production-grade platform where companies can deploy AI agents with permission boundaries, execution traces, budgets, rollback capabilities, and measurable reliability.
 
 ## 🚀 Features
@@ -92,6 +97,8 @@ AgentOS is a production-grade platform where companies can deploy AI agents with
 - Docker and Docker Compose
 - Python 3.11+ (for local development)
 - Node.js 18+ (for local development)
+- OpenAI API key (optional, for LLM features)
+- Anthropic API key (optional, for LLM features)
 
 ### Using Docker Compose (Recommended)
 
@@ -186,12 +193,22 @@ agent = await identity_service.create_agent(
 token = await identity_service.create_agent_credentials(agent)
 ```
 
-### Executing an Agent
+### Executing an Agent with LLM
 
 ```python
 from app.execution.engine import ExecutionEngine
+from app.integrations.openai import openai_integration
 
 execution_engine = ExecutionEngine(db)
+
+# Use LLM for agent reasoning
+llm_response = await openai_integration.chat_completion(
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Analyze this data"},
+    ],
+    model="gpt-4",
+)
 
 result = await execution_engine.execute_agent(
     agent_id="agent-123",
@@ -216,13 +233,26 @@ allow {
 }
 ```
 
+### Setting Up Webhooks
+
+```python
+from app.webhooks.manager import webhook_manager
+
+await webhook_manager.register_webhook(
+    webhook_id="webhook-123",
+    url="https://example.com/webhook",
+    events=["agent.execution.completed", "policy.denied"],
+    secret="your-secret-key",
+)
+```
+
 ## 🧪 Testing
 
 ### Backend Tests
 
 ```bash
 cd backend
-pytest tests/
+pytest tests/ -v --cov=app
 ```
 
 ### Frontend Tests
@@ -230,6 +260,18 @@ pytest tests/
 ```bash
 cd frontend
 npm test
+```
+
+### Demo Examples
+
+```bash
+# Run demo scripts
+python examples/demo_agent.py
+python examples/demo_replay.py
+python examples/demo_evaluation.py
+python examples/demo_llm_integration.py
+python examples/demo_monitoring.py
+python examples/demo_webhooks.py
 ```
 
 ## 📊 Monitoring
@@ -254,6 +296,9 @@ Prometheus metrics are exposed at `/metrics` endpoint.
 
 - [Architecture](ARCHITECTURE.md) - Detailed system architecture
 - [Features](FEATURES.md) - Complete feature specifications
+- [API Reference](docs/API_REFERENCE.md) - Complete API documentation
+- [Contributing](docs/CONTRIBUTING.md) - Contribution guidelines
+- [Roadmap](docs/ROADMAP.md) - Future development plans
 - [API Documentation](http://localhost:8000/docs) - Interactive API docs
 
 ## 🤝 Contributing
@@ -263,6 +308,10 @@ Contributions are welcome! Please read our contributing guidelines before submit
 ## 📄 License
 
 MIT License - see LICENSE file for details
+
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for details.
 
 ## 🌟 Star History
 
